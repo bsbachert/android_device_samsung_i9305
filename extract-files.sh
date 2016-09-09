@@ -19,10 +19,10 @@
 VENDOR=samsung
 DEVICE=i9305
 
+export FROM=`pwd`/proprietary
+
 mkdir -p ../../../vendor/$VENDOR/$DEVICE/proprietary
 
-adb root
-adb wait-for-device
 
 echo "Pulling proprietary files..."
 for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$`; do
@@ -30,7 +30,7 @@ for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$`; do
     if [ ! -d ../../../vendor/$VENDOR/$DEVICE/proprietary/$DIR ]; then
         mkdir -p ../../../vendor/$VENDOR/$DEVICE/proprietary/$DIR
     fi
-    adb pull /$FILE ../../../vendor/$VENDOR/$DEVICE/proprietary/$FILE
+	cp -v $FROM/$FILE ../../../vendor/$VENDOR/$DEVICE/proprietary/$FILE
 done
 
 
@@ -102,4 +102,5 @@ EOF
 
 EOF
 
-./../../../device/samsung/smdk4412-common/extract-files.sh
+./smdk4412-extract-files.sh
+
