@@ -14,4 +14,4 @@ allow qmiproxy init:unix_stream_socket connectto;
 
 allow qmiproxy radio_prop:property_service { set };
 
-allow qmiproxy system_file:file { execmod };
+#allow qmiproxy system_file:file { execmod };

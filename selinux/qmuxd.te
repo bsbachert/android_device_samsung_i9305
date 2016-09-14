@@ -53,4 +53,4 @@ allow qmuxd log_device:chr_file { open write };
 allow qmuxd log_device:dir { search };
 
 
-allow qmuxd system_file:file { execmod };
+#allow qmuxd system_file:file { execmod };
