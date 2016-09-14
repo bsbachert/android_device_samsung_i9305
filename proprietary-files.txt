@@ -39,3 +39,16 @@ system/lib/libgps.utils.so
 system/lib/hw/gps.default.so
 system/lib/libloc_api_v02.so
 system/lib/libTVOut.so
+system/lib/libconfigdb.so
+system/vendor/lib/liblvverx.so
+system/vendor/lib/liblvvetx.so
+system/lib/libqdp.so
+system/lib/libstlport.so
+system/lib/libdss.so
+system/lib/libdsi_netctrl.so
+system/lib/libqdi.so
+system/lib/libnetmgr.so
+system/lib/libril-qc-qmi-1.so
+system/lib/libaudiosa.so
+system/bin/netmgrd
+system/bin/gsiff_daemon
