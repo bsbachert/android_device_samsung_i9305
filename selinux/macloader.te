@@ -1,0 +1,4 @@
+allow macloader unlabeled:dir { search };
+allow macloader log_device:chr_file { open write };
+allow macloader log_device:dir { search };
+
