@@ -124,6 +124,7 @@ on property:sys.boot_completed=1
 
 # AT Distributor for factory test
 service at_distributor /system/bin/at_distributor
+    seclabel u:r:at_distributor:s0
     class late_start
     user root
     group radio log
@@ -135,6 +136,7 @@ service diag_uart_log /system/bin/diag_uart_log
     group radio
 
 service SMD-daemon /system/bin/smdexe
+    seclabel u:r:SMD-daemon:s0
     class main
     user root
     group system radio inet net_raw
@@ -147,6 +149,7 @@ service qc_kickstart /system/bin/qcks s
 
 #For EncryptionMode - remove disabled, Modify class main
 service qmiproxy /system/bin/qmiproxy
+    seclabel u:r:qmiproxy:s0
     class main
     user radio
     group radio gps
