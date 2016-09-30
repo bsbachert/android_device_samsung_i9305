@@ -28,7 +28,6 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # Init files
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/l.sh:root/l.sh \
     $(LOCAL_PATH)/rootdir/fstab.smdk4x12:root/fstab.smdk4x12 \
     $(LOCAL_PATH)/rootdir/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/rootdir/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc
