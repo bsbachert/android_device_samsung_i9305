@@ -44,6 +44,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf
 
+#telephonydb link
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/10telephonydb:system/etc/init.d/10telephonydb
+
 # Product specific Packages
 PRODUCT_PACKAGES += \
     DeviceSettings

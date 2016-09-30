@@ -1,0 +1,2 @@
+#!/system/bin/sh
+ln -sf /data/user_de/0/com.android.providers.telephony/databases /data/data/com.android.providers.telephony/databases
