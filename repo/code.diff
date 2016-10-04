@@ -1,0 +1,251 @@
+
+project bionic/
+diff --git a/linker/debugger.cpp b/linker/debugger.cpp
+index d4c7928..82f3261 100644
+--- a/linker/debugger.cpp
++++ b/linker/debugger.cpp
+@@ -259,6 +259,7 @@ static void send_debuggerd_packet(siginfo_t* info) {
+  * Catches fatal signals so we can ask debuggerd to ptrace us before
+  * we crash.
+  */
++
+ static void debuggerd_signal_handler(int signal_number, siginfo_t* info, void*) {
+   // It's possible somebody cleared the SA_SIGINFO flag, which would mean
+   // our "info" arg holds an undefined value.
+@@ -270,32 +271,27 @@ static void debuggerd_signal_handler(int signal_number, siginfo_t* info, void*)
+ 
+   send_debuggerd_packet(info);
+ 
+-  // We need to return from the signal handler so that debuggerd can dump the
+-  // thread that crashed, but returning here does not guarantee that the signal
+-  // will be thrown again, even for SIGSEGV and friends, since the signal could
+-  // have been sent manually. Resend the signal with rt_tgsigqueueinfo(2) to
+-  // preserve the SA_SIGINFO contents.
++  // Remove our net so we fault for real when we return.
+   signal(signal_number, SIG_DFL);
+ 
+-  struct siginfo si;
+-  if (!info) {
+-    memset(&si, 0, sizeof(si));
+-    si.si_code = SI_USER;
+-    si.si_pid = getpid();
+-    si.si_uid = getuid();
+-    info = &si;
+-  } else if (info->si_code >= 0 || info->si_code == SI_TKILL) {
+-    // rt_tgsigqueueinfo(2)'s documentation appears to be incorrect on kernels
+-    // that contain commit 66dd34a (3.9+). The manpage claims to only allow
+-    // negative si_code values that are not SI_TKILL, but 66dd34a changed the
+-    // check to allow all si_code values in calls coming from inside the house.
+-  }
+-
+-  int rc = syscall(SYS_rt_tgsigqueueinfo, getpid(), gettid(), signal_number, info);
+-  if (rc != 0) {
+-    __libc_format_log(ANDROID_LOG_FATAL, "libc", "failed to resend signal during crash: %s",
+-                      strerror(errno));
+-    _exit(0);
++  // These signals are not re-thrown when we resume.  This means that
++  // crashing due to (say) SIGPIPE doesn't work the way you'd expect it
++  // to.  We work around this by throwing them manually.  We don't want
++  // to do this for *all* signals because it'll screw up the si_addr for
++  // faults like SIGSEGV. It does screw up the si_code, which is why we
++  // passed that to debuggerd above.
++  switch (signal_number) {
++    case SIGABRT:
++    case SIGFPE:
++    case SIGPIPE:
++#if defined(SIGSTKFLT)
++    case SIGSTKFLT:
++#endif
++    case SIGTRAP:
++      tgkill(getpid(), gettid(), signal_number);
++      break;
++    default:    // SIGILL, SIGBUS, SIGSEGV
++      break;
+   }
+ }
+ 
+diff --git a/linker/linker.cpp b/linker/linker.cpp
+index c3c87a2..6da71a8 100644
+--- a/linker/linker.cpp
++++ b/linker/linker.cpp
+@@ -3997,7 +3997,7 @@ bool soinfo::link_image(const soinfo_list_t& global_group, const soinfo_list_t&
+ #endif
+       PRINT("%s: has text relocations", get_realpath());
+       DL_ERR("%s: has text relocations", get_realpath());
+-      return false;
++//      return false;
+     }
+ #endif
+     // Make segments writable to allow text relocations to work properly. We will later call
+
+project build/
+diff --git a/core/Makefile b/core/Makefile
+index 1eb1f26..a90bc35 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -1073,9 +1073,9 @@ define build-recoveryimage-target
+     $(BOOT_SIGNER) /recovery $(1) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $(1))
+   $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
+     $(VBOOT_SIGNER) $(FUTILITY) $(1).unsigned $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbpubk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbprivk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_SUBKEY).vbprivk $(1).keyblock $(1))
+-  $(if $(filter true,BOARD_USES_RECOVERY_AS_BOOT), \
+-    $(hide) $(call assert-max-image-size,$(1),$(BOARD_BOOTIMAGE_PARTITION_SIZE)), \
+-    $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE)))
++#  $(if $(filter true,BOARD_USES_RECOVERY_AS_BOOT), \
++#    $(hide) $(call assert-max-image-size,$(1),$(BOARD_BOOTIMAGE_PARTITION_SIZE)), \
++#    $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE)))
+   @echo "Made recovery image: $@"
+ endef
+ 
+
+project external/stlport/
+diff --git a/src/_stdio_file.h b/src/_stdio_file.h
+index d913fc4..e8174d2 100644
+--- a/src/_stdio_file.h
++++ b/src/_stdio_file.h
+@@ -104,7 +104,8 @@ inline int _FILE_fd(const FILE *__f) { return __f->_fd; }
+ 
+ #else  /* The most common access to file descriptor. */
+ 
+-inline int _FILE_fd(const FILE *__f) { return __f->_file; }
++//inline int _FILE_fd(const FILE *__f) { return __f->_file; }
++inline int _FILE_fd(const FILE *__f) { return fileno(__CONST_CAST(FILE*, __f)); }
+ 
+ #endif
+ 
+
+project frameworks/base/
+diff --git a/core/java/android/database/sqlite/SQLiteOpenHelper.java b/core/java/android/database/sqlite/SQLiteOpenHelper.java
+index 2dd4800..dbe13b6 100644
+--- a/core/java/android/database/sqlite/SQLiteOpenHelper.java
++++ b/core/java/android/database/sqlite/SQLiteOpenHelper.java
+@@ -357,7 +357,7 @@ public abstract class SQLiteOpenHelper {
+      * @param newVersion The new database version.
+      */
+     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+-        throw new SQLiteException("Can't downgrade database from version " +
++        throw new SQLiteException("Can't downgrade database " + mContext.getDatabasePath(mName).getPath()  + " from version " +
+                 oldVersion + " to " + newVersion);
+     }
+ 
+
+project frameworks/native/
+diff --git a/services/surfaceflinger/SurfaceFlinger.h b/services/surfaceflinger/SurfaceFlinger.h
+index 83d826f..c99e850 100644
+--- a/services/surfaceflinger/SurfaceFlinger.h
++++ b/services/surfaceflinger/SurfaceFlinger.h
+@@ -146,6 +146,13 @@ public:
+         return *mRenderEngine;
+     }
+ 
++    class LayerVector : public SortedVector< sp<Layer> > {
++    public:
++        LayerVector();
++        LayerVector(const LayerVector& rhs);
++        virtual int do_compare(const void* lhs, const void* rhs) const;
++    };
++
+ private:
+     friend class Client;
+     friend class DisplayEventConnection;
+@@ -167,12 +174,6 @@ private:
+      * Internal data structures
+      */
+ 
+-    class LayerVector : public SortedVector< sp<Layer> > {
+-    public:
+-        LayerVector();
+-        LayerVector(const LayerVector& rhs);
+-        virtual int do_compare(const void* lhs, const void* rhs) const;
+-    };
+ 
+     struct DisplayDeviceState {
+         DisplayDeviceState();
+
+project hardware/libhardware/
+diff --git a/include/hardware/gps.h b/include/hardware/gps.h
+index acf601b..42551de 100644
+--- a/include/hardware/gps.h
++++ b/include/hardware/gps.h
+@@ -670,6 +670,10 @@ typedef struct {
+     uint16_t tac;
+     /** Physical Cell id in LTE (not used in 2G and 3G) */
+     uint16_t pcid;
++//#ifdef AGPS_USE_PSC
++    uint16_t psc;
++//#endif
++
+ } AGpsRefLocationCellID;
+ 
+ typedef struct {
+
+project hardware/libhardware_legacy/
+diff --git a/wifi/wifi.c b/wifi/wifi.c
+index d92cdbd..7e0f75c 100644
+--- a/wifi/wifi.c
++++ b/wifi/wifi.c
+@@ -202,21 +202,23 @@ char* get_samsung_wifi_type()
+ 
+ int insmod(const char *filename, const char *args)
+ {
+-     /* O_NOFOLLOW is removed as wlan.ko is symlink pointing to
+-        the vendor specfic file which is in readonly location */
+-     int fd = open(filename, O_RDONLY | O_CLOEXEC);
+-     if (fd == -1) {
+-        ALOGD("insmod: open(\"%s\") failed: %s", filename, strerror(errno));
++    void *module;
++    unsigned int size;
++    int ret;
++
++    module = load_file(filename, &size);
++    if (!module)
+         return -1;
+-     }
+-     int rc = syscall(__NR_finit_module, fd, args, 0);
+-     if (rc == -1) {
+-       ALOGD("finit_module for \"%s\" failed: %s", filename, strerror(errno));
+-     }
+-     close(fd);
+-     return rc;
++
++    ret = init_module(module, size, args);
++    ALOGD("init_module %d\n",ret);
++    
++    free(module);
++
++    return ret;
+ }
+ 
++
+ int rmmod(const char *modname)
+ {
+     int ret = -1;
+
+project prebuilts/sdk/
+diff --git a/tools/jack-admin b/tools/jack-admin
+index ee193fc..40202aa 100755
+--- a/tools/jack-admin
++++ b/tools/jack-admin
+@@ -26,7 +26,7 @@ umask 077
+ JACK_HOME="${JACK_HOME:=$HOME/.jack-server}"
+ CLIENT_SETTING="${CLIENT_SETTING:=$HOME/.jack-settings}"
+ TMPDIR=${TMPDIR:=/tmp}
+-JACK_SERVER_VM_ARGUMENTS="${JACK_SERVER_VM_ARGUMENTS:=-Dfile.encoding=UTF-8 -XX:+TieredCompilation}"
++JACK_SERVER_VM_ARGUMENTS="${JACK_SERVER_VM_ARGUMENTS:=-Dfile.encoding=UTF-8 -XX:+TieredCompilation} -Xmx4096m"
+ JACK_EXTRA_CURL_OPTIONS=${JACK_EXTRA_CURL_OPTIONS:=}
+ 
+ LAUNCHER_JAR="$JACK_HOME/launcher.jar"
+
+project system/bt/
+diff --git a/osi/src/alarm.c b/osi/src/alarm.c
+index 69ded69..a565038 100644
+--- a/osi/src/alarm.c
++++ b/osi/src/alarm.c
+@@ -96,6 +96,8 @@ struct alarm_t {
+ int64_t TIMER_INTERVAL_FOR_WAKELOCK_IN_MS = 3000;
+ static const clockid_t CLOCK_ID = CLOCK_BOOTTIME;
+ 
++#define KERNEL_MISSING_CLOCK_BOOTTIME_ALARM TRUE
++
+ #if defined(KERNEL_MISSING_CLOCK_BOOTTIME_ALARM) && (KERNEL_MISSING_CLOCK_BOOTTIME_ALARM == TRUE)
+ static const clockid_t CLOCK_ID_ALARM = CLOCK_BOOTTIME;
+ #else
