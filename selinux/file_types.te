@@ -6,7 +6,7 @@ type kickstart_exec, file_type;
 type macloader_exec, file_type;
 type mdnie_sysfs, file_type;
 type mfc_device, file_type;
-type qmuxd_exec, file_type;
+type qmuxd_exec, exec_type, file_type;
 type qmuxd_socket, file_type;
 type rfkill_device, file_type;
 type sensors_data_file, file_type;
