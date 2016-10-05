@@ -1,2 +1,0 @@
-allow gatekeeperd log_device:chr_file { open write };
-allow gatekeeperd log_device:dir { search };

@@ -1,2 +1,0 @@
-allow bootanim log_device:chr_file { open write };
-allow bootanim log_device:dir { search };
