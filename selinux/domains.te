@@ -1,0 +1,6 @@
+type macloader, domain;
+type qmuxd, domain;
+type at_distributor, domain;
+type kickstart, domain;
+type qmiproxy, domain;
+type SMD-daemon, domain;
