@@ -1,2 +1,3 @@
 init_daemon_domain(qmuxd)
 init_daemon_domain(kickstart)
+init_daemon_domain(SMD-daemon)
