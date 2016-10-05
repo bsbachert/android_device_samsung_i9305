@@ -1,2 +1,1 @@
 init_daemon_domain(qmuxd)
-init_daemon_domain(kickstart)
