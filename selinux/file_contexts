@@ -62,6 +62,8 @@
 /system/bin/ks                          u:object_r:kickstart_exec:s0
 /system/bin/qcks                        u:object_r:kickstart_exec:s0
 /system/bin/smdexe                      u:object_r:SMD-daemon_exec:s0
+/system/bin/qmiproxy                    u:object_r:qmiproxy_exec:s0
+/system/bin/at_distributor              u:object_r:at_distributor:s0
 
 # Sockets
 /dev/socket/qmux_audio(/.*)?            u:object_r:qmuxd_socket:s0

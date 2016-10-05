@@ -1,3 +1,5 @@
 init_daemon_domain(qmuxd)
 init_daemon_domain(kickstart)
 init_daemon_domain(SMD-daemon)
+init_daemon_domain(qmiproxy)
+init_daemon_domain(at_distributor)

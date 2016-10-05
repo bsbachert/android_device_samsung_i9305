@@ -11,3 +11,5 @@ type qmuxd_socket, file_type;
 type rfkill_device, file_type;
 type sensors_data_file, file_type;
 type SMD-daemon_exec, exec_type, file_type;
+type qmiproxy_exec, exec_type, file_type;
+type at_distributor_exec, exec_type, file_type;
