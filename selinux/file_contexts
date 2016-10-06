@@ -38,7 +38,9 @@
 /tombstones/qcks(/.*)?                  u:object_r:kickstart_data_file:s0
 
 # MDNIE
+#mode  negative  outdoor  scenario  tunning  uevent
 /sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/scenario -- u:object_r:mdnie_sysfs:s0
+/sys/devices/platform/samsung-pd.2/mdnie/mdnie/mdnie/negative -- u:object_r:mdnie_sysfs:s0
 
 # Vibrator
 /dev/tspdrv                             u:object_r:input_device:s0
