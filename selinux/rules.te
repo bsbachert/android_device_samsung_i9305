@@ -1,258 +1,114 @@
+####
+allow cameraserver kernel:system { module_request };
 allow cameraserver storage_file:dir { search };
 allow cameraserver mnt_user_file:dir { search };
 allow cameraserver storage_file:lnk_file { read };
 allow cameraserver firmware_camera:dir { search };
 allow cameraserver tmpfs:dir { search };
 allow cameraserver mnt_user_file:lnk_file { read };
-allow cameraserver firmware_camera:file { read };
-allow cameraserver firmware_camera:file { open };
-allow cameraserver gpu_device:chr_file { read };
-allow cameraserver gpu_device:chr_file { write };
-allow cameraserver gpu_device:chr_file { ioctl };
-allow cameraserver gpu_device:chr_file { open };
+allow cameraserver firmware_camera:file { read open };
+allow cameraserver gpu_device:chr_file { read write ioctl open };
 allow cameraserver fuse:dir { search };
 
+allow vold efs_file:dir { read ioctl open };
 
 allow sdcardd sdcard_posix:fifo_file { getattr };
 allow sdcardd mnt_user_file:dir { search };
 allow sdcardd storage_file:lnk_file { read };
-allow sdcardd sdcard_posix:lnk_file { read };
-allow sdcardd sdcard_posix:lnk_file { getattr };
+allow sdcardd sdcard_posix:lnk_file { read getattr };
 allow sdcardd mnt_user_file:lnk_file { read };
 allow sdcardd sdcard_posix:blk_file { getattr };
 allow sdcardd sdcard_posix:chr_file { getattr };
 
+allow kickstart boot_block_device:blk_file { write read getattr open };
 allow kickstart init:unix_stream_socket { connectto };
-allow kickstart kickstart_data_file:file { read };
-allow kickstart kickstart_data_file:file { write };
-allow kickstart kickstart_data_file:file { getattr };
-allow kickstart kickstart_data_file:file { open };
-allow kickstart kickstart_data_file:file { setattr };
-allow kickstart vfat:file { read };
-allow kickstart vfat:file { getattr };
-allow kickstart vfat:file { open };
-allow kickstart radio_device:chr_file { read };
-allow kickstart radio_device:chr_file { write };
-allow kickstart radio_device:chr_file { getattr };
-allow kickstart radio_device:chr_file { open };
-allow kickstart radio_device:chr_file { ioctl };
+allow kickstart shell_exec:file { read execute open getattr execute_no_trans };
+allow kickstart vfat:file { read getattr open };
+allow kickstart radio_device:chr_file { read write getattr open ioctl };
 allow kickstart block_device:dir { write };
-allow kickstart kickstart_exec:file { read };
-allow kickstart kickstart_exec:file { execute_no_trans };
-allow kickstart kickstart_exec:file { getattr };
-allow kickstart kickstart_exec:file { open };
-allow kickstart boot_block_device:blk_file { write };
-allow kickstart boot_block_device:blk_file { read };
-allow kickstart boot_block_device:blk_file { getattr };
-allow kickstart boot_block_device:blk_file { open };
+allow kickstart kickstart_exec:file { read getattr open execute_no_trans };
+allow kickstart radio_prop:property_service { set };
+allow kickstart kickstart_data_file:file { read write getattr open setattr };
+allow kickstart toolbox_exec:file { read getattr open execute execute_no_trans };
 allow kickstart kickstart:capability { setuid };
-allow kickstart toolbox_exec:file { read };
-allow kickstart toolbox_exec:file { getattr };
-allow kickstart toolbox_exec:file { open };
-allow kickstart toolbox_exec:file { execute };
-allow kickstart toolbox_exec:file { execute_no_trans };
-allow kickstart shell_exec:file { read };
-allow kickstart shell_exec:file { execute };
-allow kickstart shell_exec:file { open };
-allow kickstart shell_exec:file { getattr };
-allow kickstart shell_exec:file { execute_no_trans };
 allow kickstart property_socket:sock_file { write };
 
+allow kernel tmpfs:chr_file { getattr ioctl };
 
-
-
+allow netd kernel:system { module_request };
 
 allow bluetooth sysfs:file { write };
-allow bluetooth wifi_data_file:file { read };
-allow bluetooth wifi_data_file:file { open };
+allow bluetooth wifi_data_file:file { read open };
 
+allow system_server qmuxd_socket:sock_file { write create unlink setattr };
+allow system_server uhid_device:chr_file { read write ioctl open };
+allow system_server qmuxd:unix_stream_socket { connectto };
+allow system_server system_server:capability { sys_module };
+allow system_server qmuxd_socket:dir { write remove_name add_name };
 
+allow at_distributor proc:file { read getattr open };
 
-
-allow at_distributor proc:file { read };
-allow at_distributor proc:file { getattr };
-allow at_distributor proc:file { open };
-
-allow qmuxd sysfs:file { write };
-allow qmuxd sysfs:file { open };
-allow qmuxd qmuxd_exec:file { read };
-allow qmuxd qmuxd_exec:file { getattr };
-allow qmuxd radio_device:chr_file { read };
-allow qmuxd radio_device:chr_file { write };
-allow qmuxd radio_device:chr_file { open };
-allow qmuxd qmuxd_socket:sock_file { create };
-allow qmuxd qmuxd_socket:sock_file { unlink };
-allow qmuxd qmuxd_socket:sock_file { getattr };
-allow qmuxd qmuxd_socket:sock_file { setattr };
-allow qmuxd qmuxd_socket:dir { write };
-allow qmuxd qmuxd_socket:dir { remove_name };
-allow qmuxd qmuxd_socket:dir { add_name };
-
-
-
-
-allow sysinit radio_data_file:lnk_file { read };
-allow sysinit radio_data_file:lnk_file { rename };
-allow sysinit radio_data_file:lnk_file { create };
-allow sysinit radio_data_file:lnk_file { unlink };
-allow sysinit radio_data_file:file { read };
-allow sysinit radio_data_file:file { write };
-allow sysinit radio_data_file:file { create };
-allow sysinit radio_data_file:file { unlink };
-allow sysinit radio_data_file:file { open };
-allow sysinit radio_data_file:dir { write };
-allow sysinit radio_data_file:dir { remove_name };
-allow sysinit radio_data_file:dir { search };
-allow sysinit radio_data_file:dir { getattr };
-allow sysinit radio_data_file:dir { add_name };
-
-
-
-allow init qmiproxy:process { siginh };
-allow init qmiproxy:process { transition };
-allow init qmiproxy:process { noatsecure };
-allow init qmiproxy:process { rlimitinh };
-allow init SMD-daemon:process { siginh };
-allow init SMD-daemon:process { transition };
-allow init SMD-daemon:process { noatsecure };
-allow init SMD-daemon:process { rlimitinh };
-allow init sysfs:lnk_file { setattr };
-allow init kickstart:process { siginh };
-allow init kickstart:process { transition };
-allow init kickstart:process { noatsecure };
-allow init kickstart:process { rlimitinh };
-allow init qmuxd:process { siginh };
-allow init qmuxd:process { transition };
-allow init qmuxd:process { noatsecure };
-allow init qmuxd:process { rlimitinh };
-allow init rfkill_device:chr_file { setattr };
-allow init at_distributor:process { siginh };
-allow init at_distributor:process { transition };
-allow init at_distributor:process { noatsecure };
-allow init at_distributor:process { rlimitinh };
-allow init block_device:lnk_file { setattr };
-
+allow qmuxd sysfs:file { write open };
+allow qmuxd qmuxd_socket:sock_file { create unlink getattr setattr };
+allow qmuxd qmuxd_exec:file { read getattr };
+allow qmuxd qmuxd_socket:dir { write remove_name add_name };
+allow qmuxd radio_device:chr_file { read write open };
 
 allow SMD-daemon SMD-daemon:capability { setuid };
 
+allow sysinit radio_data_file:dir { write remove_name search getattr add_name };
+allow sysinit radio_data_file:lnk_file { read rename create unlink };
+allow sysinit radio_data_file:file { read write create unlink open };
 
+allow init kernel:system { module_request };
+allow init qmiproxy:process { siginh rlimitinh transition noatsecure };
+allow init SMD-daemon:process { siginh rlimitinh transition noatsecure };
+allow init kickstart:process { siginh rlimitinh transition noatsecure };
+allow init sysfs:lnk_file { setattr };
+allow init efs_block_device:blk_file { read getattr open ioctl };
+allow init qmuxd:process { siginh rlimitinh transition noatsecure };
+allow init rfkill_device:chr_file { setattr };
+allow init at_distributor:process { siginh rlimitinh transition noatsecure };
+allow init tmpfs:lnk_file { create };
+allow init block_device:lnk_file { setattr };
 
-allow untrusted_app fuse:lnk_file { read };
-allow untrusted_app sysfs:file { read };
-allow untrusted_app sysfs:file { open };
-allow untrusted_app fuse:fifo_file { getattr };
-allow untrusted_app fuse:blk_file { getattr };
-allow untrusted_app fuse:chr_file { getattr };
+allow system_app mdnie_sysfs:file { write getattr open };
 
+allow mdnie_sysfs sysfs:filesystem { associate };
 
-allow ueventd efs_block_device:blk_file { relabelfrom };
-allow ueventd efs_block_device:blk_file { relabelto };
-allow ueventd firmware_camera:file { read };
-allow ueventd firmware_camera:file { getattr };
-allow ueventd firmware_camera:file { open };
+allow ueventd firmware_mfc:file { read getattr open };
+allow ueventd mdnie_sysfs:file { getattr };
+allow ueventd efs_block_device:blk_file { relabelfrom relabelto create setattr };
 allow ueventd firmware_camera:dir { search };
+allow ueventd rfkill_device:chr_file { create setattr };
+allow ueventd firmware_camera:file { read getattr open };
+allow ueventd mfc_device:chr_file { create setattr };
 
+allow fsck efs_block_device:blk_file { read write getattr open ioctl };
+allow fsck loop_device:blk_file { read write getattr open ioctl };
+allow fsck fsck:capability { dac_override };
 
-
-allow system_server qmuxd:unix_stream_socket { connectto };
-allow system_server system_server:capability { sys_module };
-allow system_server qmuxd_socket:sock_file { write };
-allow system_server qmuxd_socket:sock_file { create };
-allow system_server qmuxd_socket:sock_file { unlink };
-allow system_server qmuxd_socket:sock_file { setattr };
-allow system_server uhid_device:chr_file { read };
-allow system_server uhid_device:chr_file { write };
-allow system_server uhid_device:chr_file { ioctl };
-allow system_server uhid_device:chr_file { open };
-allow system_server qmuxd_socket:dir { write };
-allow system_server qmuxd_socket:dir { remove_name };
-allow system_server qmuxd_socket:dir { add_name };
-
-allow wpa rfkill_device:chr_file { read };
-allow wpa rfkill_device:chr_file { open };
-
+allow wpa rfkill_device:chr_file { read open };
 
 allow nfc firmware_camera:dir { search };
-
-
-
 
 allow rild qmuxd:unix_stream_socket { connectto };
 allow rild rild:capability { dac_override };
 allow rild radio_data_file:lnk_file { read };
-allow rild qmuxd_socket:sock_file { write };
-allow rild qmuxd_socket:sock_file { create };
-allow rild qmuxd_socket:sock_file { unlink };
-allow rild qmuxd_socket:sock_file { setattr };
+allow rild qmuxd_socket:sock_file { write create unlink setattr };
 allow rild proc_net:file { write };
-allow rild qmuxd_socket:dir { write };
-allow rild qmuxd_socket:dir { remove_name };
-allow rild qmuxd_socket:dir { add_name };
+allow rild qmuxd_socket:dir { write remove_name add_name };
 
+allow untrusted_app fuse:lnk_file { read };
+allow untrusted_app sysfs:file { read open };
+allow untrusted_app fuse:blk_file { getattr };
+allow untrusted_app fuse:fifo_file { getattr };
+allow untrusted_app fuse:chr_file { getattr };
 
+allow mediacodec system_file:dir { read open };
 
-
-
-allow mediacodec system_file:dir { read };
-allow mediacodec system_file:dir { open };
-
-allow qmiproxy init:unix_stream_socket { connectto };
 allow qmiproxy qmuxd_socket:sock_file { create };
-allow qmiproxy qmuxd_socket:dir { write };
-allow qmiproxy qmuxd_socket:dir { add_name };
+allow qmiproxy init:unix_stream_socket { connectto };
+allow qmiproxy qmuxd_socket:dir { write add_name };
 allow qmiproxy property_socket:sock_file { write };
 
-
-allow vold efs_file:dir { read };
-allow vold efs_file:dir { ioctl };
-allow vold efs_file:dir { open };
-allow init tmpfs:lnk_file { create };
-
-allow kickstart radio_prop:property_service { set };
-
-allow ueventd efs_block_device:blk_file { create };
-allow ueventd efs_block_device:blk_file { setattr };
-allow ueventd mfc_device:chr_file { create };
-allow ueventd mfc_device:chr_file { setattr };
-allow ueventd rfkill_device:chr_file { create };
-allow ueventd rfkill_device:chr_file { setattr };
-
-allow ueventd firmware_mfc:file { read };
-allow ueventd firmware_mfc:file { getattr };
-allow ueventd firmware_mfc:file { open };
-
-allow fsck loop_device:blk_file { read };
-allow fsck loop_device:blk_file { write };
-allow fsck loop_device:blk_file { getattr };
-allow fsck loop_device:blk_file { open };
-allow fsck loop_device:blk_file { ioctl };
-
-allow init efs_block_device:blk_file { read };
-allow init efs_block_device:blk_file { getattr };
-allow init efs_block_device:blk_file { open };
-allow init efs_block_device:blk_file { ioctl };
-
-allow fsck efs_block_device:blk_file { read };
-allow fsck efs_block_device:blk_file { write };
-allow fsck efs_block_device:blk_file { getattr };
-allow fsck efs_block_device:blk_file { open };
-allow fsck fsck:capability { dac_override };
-
-####
-
-allow fsck efs_block_device:blk_file { ioctl };
-
-
-allow cameraserver kernel:system { module_request };
-
-allow kernel tmpfs:chr_file { getattr ioctl };
-
-allow mdnie_sysfs sysfs:filesystem { associate };
-
-allow netd kernel:system { module_request };
-
-allow ueventd mdnie_sysfs:file { getattr };
-
-allow init kernel:system { module_request };
-
-allow system_app mdnie_sysfs:file { write getattr open };
