@@ -241,3 +241,46 @@ allow qmiproxy property_socket:sock_file { write };
 
 allow installd kernel:system { module_request };
 
+allow vold efs_file:dir { read };
+allow vold efs_file:dir { ioctl };
+allow vold efs_file:dir { open };
+allow init kernel:system { module_request };
+allow init tmpfs:lnk_file { create };
+
+allow kickstart radio_prop:property_service { set };
+
+allow ueventd efs_block_device:blk_file { create };
+allow ueventd efs_block_device:blk_file { setattr };
+allow ueventd kernel:system { module_request };
+allow ueventd mfc_device:chr_file { create };
+allow ueventd mfc_device:chr_file { setattr };
+allow ueventd rfkill_device:chr_file { create };
+allow ueventd rfkill_device:chr_file { setattr };
+
+allow ueventd firmware_mfc:file { read };
+allow ueventd firmware_mfc:file { getattr };
+allow ueventd firmware_mfc:file { open };
+
+allow fsck kernel:system { module_request };
+allow fsck loop_device:blk_file { read };
+allow fsck loop_device:blk_file { write };
+allow fsck loop_device:blk_file { getattr };
+allow fsck loop_device:blk_file { open };
+allow fsck loop_device:blk_file { ioctl };
+
+allow init efs_block_device:blk_file { read };
+allow init efs_block_device:blk_file { getattr };
+allow init efs_block_device:blk_file { open };
+allow init efs_block_device:blk_file { ioctl };
+
+allow fsck efs_block_device:blk_file { read };
+allow fsck efs_block_device:blk_file { write };
+allow fsck efs_block_device:blk_file { getattr };
+allow fsck efs_block_device:blk_file { open };
+allow fsck fsck:capability { dac_override };
+
+####
+allow recovery_refresh kernel:system { module_request };
+
+allow fsck efs_block_device:blk_file { ioctl };
+
