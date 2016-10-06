@@ -242,3 +242,17 @@ allow fsck fsck:capability { dac_override };
 
 allow fsck efs_block_device:blk_file { ioctl };
 
+
+allow cameraserver kernel:system { module_request };
+
+allow kernel tmpfs:chr_file { getattr ioctl };
+
+allow mdnie_sysfs sysfs:filesystem { associate };
+
+allow netd kernel:system { module_request };
+
+allow ueventd mdnie_sysfs:file { getattr };
+
+allow init kernel:system { module_request };
+
+allow system_app mdnie_sysfs:file { write getattr open };
