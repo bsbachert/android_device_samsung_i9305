@@ -1,4 +1,3 @@
-allow cameraserver kernel:system { module_request };
 allow cameraserver storage_file:dir { search };
 allow cameraserver mnt_user_file:dir { search };
 allow cameraserver storage_file:lnk_file { read };
@@ -13,10 +12,8 @@ allow cameraserver gpu_device:chr_file { ioctl };
 allow cameraserver gpu_device:chr_file { open };
 allow cameraserver fuse:dir { search };
 
-allow vold kernel:system { module_request };
 
 allow sdcardd sdcard_posix:fifo_file { getattr };
-allow sdcardd kernel:system { module_request };
 allow sdcardd mnt_user_file:dir { search };
 allow sdcardd storage_file:lnk_file { read };
 allow sdcardd sdcard_posix:lnk_file { read };
@@ -25,7 +22,6 @@ allow sdcardd mnt_user_file:lnk_file { read };
 allow sdcardd sdcard_posix:blk_file { getattr };
 allow sdcardd sdcard_posix:chr_file { getattr };
 
-allow kickstart kernel:system { module_request };
 allow kickstart init:unix_stream_socket { connectto };
 allow kickstart kickstart_data_file:file { read };
 allow kickstart kickstart_data_file:file { write };
@@ -62,30 +58,21 @@ allow kickstart shell_exec:file { getattr };
 allow kickstart shell_exec:file { execute_no_trans };
 allow kickstart property_socket:sock_file { write };
 
-allow adbd kernel:system { module_request };
 
-allow debuggerd kernel:system { module_request };
 
-allow netd kernel:system { module_request };
 
-allow gatekeeperd kernel:system { module_request };
 
 allow bluetooth sysfs:file { write };
 allow bluetooth wifi_data_file:file { read };
 allow bluetooth wifi_data_file:file { open };
 
-allow lmkd kernel:system { module_request };
 
-allow surfaceflinger kernel:system { module_request };
 
-allow sgdisk kernel:system { module_request };
 
 allow at_distributor proc:file { read };
 allow at_distributor proc:file { getattr };
 allow at_distributor proc:file { open };
-allow at_distributor kernel:system { module_request };
 
-allow qmuxd kernel:system { module_request };
 allow qmuxd sysfs:file { write };
 allow qmuxd sysfs:file { open };
 allow qmuxd qmuxd_exec:file { read };
@@ -101,13 +88,9 @@ allow qmuxd qmuxd_socket:dir { write };
 allow qmuxd qmuxd_socket:dir { remove_name };
 allow qmuxd qmuxd_socket:dir { add_name };
 
-allow drmserver kernel:system { module_request };
 
-allow keystore kernel:system { module_request };
 
-allow dex2oat kernel:system { module_request };
 
-allow sysinit kernel:system { module_request };
 allow sysinit radio_data_file:lnk_file { read };
 allow sysinit radio_data_file:lnk_file { rename };
 allow sysinit radio_data_file:lnk_file { create };
@@ -123,9 +106,7 @@ allow sysinit radio_data_file:dir { search };
 allow sysinit radio_data_file:dir { getattr };
 allow sysinit radio_data_file:dir { add_name };
 
-allow mediadrmserver kernel:system { module_request };
 
-allow blkid_untrusted kernel:system { module_request };
 
 allow init qmiproxy:process { siginh };
 allow init qmiproxy:process { transition };
@@ -151,24 +132,18 @@ allow init at_distributor:process { noatsecure };
 allow init at_distributor:process { rlimitinh };
 allow init block_device:lnk_file { setattr };
 
-allow servicemanager kernel:system { module_request };
 
-allow SMD-daemon kernel:system { module_request };
 allow SMD-daemon SMD-daemon:capability { setuid };
 
-allow shell kernel:system { module_request };
 
-allow perfprofd kernel:system { module_request };
 
 allow untrusted_app fuse:lnk_file { read };
-allow untrusted_app kernel:system { module_request };
 allow untrusted_app sysfs:file { read };
 allow untrusted_app sysfs:file { open };
 allow untrusted_app fuse:fifo_file { getattr };
 allow untrusted_app fuse:blk_file { getattr };
 allow untrusted_app fuse:chr_file { getattr };
 
-allow tzdatacheck kernel:system { module_request };
 
 allow ueventd efs_block_device:blk_file { relabelfrom };
 allow ueventd efs_block_device:blk_file { relabelto };
@@ -177,9 +152,7 @@ allow ueventd firmware_camera:file { getattr };
 allow ueventd firmware_camera:file { open };
 allow ueventd firmware_camera:dir { search };
 
-allow fsck_untrusted kernel:system { module_request };
 
-allow recovery_persist kernel:system { module_request };
 
 allow system_server qmuxd:unix_stream_socket { connectto };
 allow system_server system_server:capability { sys_module };
@@ -198,15 +171,11 @@ allow system_server qmuxd_socket:dir { add_name };
 allow wpa rfkill_device:chr_file { read };
 allow wpa rfkill_device:chr_file { open };
 
-allow mediaextractor kernel:system { module_request };
 
 allow nfc firmware_camera:dir { search };
 
-allow logd kernel:system { module_request };
 
-allow zygote kernel:system { module_request };
 
-allow vdc kernel:system { module_request };
 
 allow rild qmuxd:unix_stream_socket { connectto };
 allow rild rild:capability { dac_override };
@@ -220,38 +189,29 @@ allow rild qmuxd_socket:dir { write };
 allow rild qmuxd_socket:dir { remove_name };
 allow rild qmuxd_socket:dir { add_name };
 
-allow audioserver kernel:system { module_request };
 
-allow healthd kernel:system { module_request };
 
-allow mediaserver kernel:system { module_request };
 
-allow bootanim kernel:system { module_request };
 
-allow mediacodec kernel:system { module_request };
 allow mediacodec system_file:dir { read };
 allow mediacodec system_file:dir { open };
 
-allow qmiproxy kernel:system { module_request };
 allow qmiproxy init:unix_stream_socket { connectto };
 allow qmiproxy qmuxd_socket:sock_file { create };
 allow qmiproxy qmuxd_socket:dir { write };
 allow qmiproxy qmuxd_socket:dir { add_name };
 allow qmiproxy property_socket:sock_file { write };
 
-allow installd kernel:system { module_request };
 
 allow vold efs_file:dir { read };
 allow vold efs_file:dir { ioctl };
 allow vold efs_file:dir { open };
-allow init kernel:system { module_request };
 allow init tmpfs:lnk_file { create };
 
 allow kickstart radio_prop:property_service { set };
 
 allow ueventd efs_block_device:blk_file { create };
 allow ueventd efs_block_device:blk_file { setattr };
-allow ueventd kernel:system { module_request };
 allow ueventd mfc_device:chr_file { create };
 allow ueventd mfc_device:chr_file { setattr };
 allow ueventd rfkill_device:chr_file { create };
@@ -261,7 +221,6 @@ allow ueventd firmware_mfc:file { read };
 allow ueventd firmware_mfc:file { getattr };
 allow ueventd firmware_mfc:file { open };
 
-allow fsck kernel:system { module_request };
 allow fsck loop_device:blk_file { read };
 allow fsck loop_device:blk_file { write };
 allow fsck loop_device:blk_file { getattr };
@@ -280,7 +239,6 @@ allow fsck efs_block_device:blk_file { open };
 allow fsck fsck:capability { dac_override };
 
 ####
-allow recovery_refresh kernel:system { module_request };
 
 allow fsck efs_block_device:blk_file { ioctl };
 
