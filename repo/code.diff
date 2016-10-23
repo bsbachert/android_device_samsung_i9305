@@ -65,7 +65,7 @@ index d4c7928..82f3261 100644
  }
  
 diff --git a/linker/linker.cpp b/linker/linker.cpp
-index c3c87a2..6da71a8 100644
+index 9b1f97b..f7df5fb 100644
 --- a/linker/linker.cpp
 +++ b/linker/linker.cpp
 @@ -3997,7 +3997,7 @@ bool soinfo::link_image(const soinfo_list_t& global_group, const soinfo_list_t&
@@ -130,7 +130,7 @@ index 2dd4800..dbe13b6 100644
 
 project frameworks/native/
 diff --git a/services/surfaceflinger/SurfaceFlinger.h b/services/surfaceflinger/SurfaceFlinger.h
-index 83d826f..c99e850 100644
+index 9ccb552..f76dbe8 100644
 --- a/services/surfaceflinger/SurfaceFlinger.h
 +++ b/services/surfaceflinger/SurfaceFlinger.h
 @@ -146,6 +146,13 @@ public:
@@ -237,7 +237,7 @@ index ee193fc..40202aa 100755
 
 project system/bt/
 diff --git a/osi/src/alarm.c b/osi/src/alarm.c
-index 69ded69..a565038 100644
+index cb2f7f8..afe4511 100644
 --- a/osi/src/alarm.c
 +++ b/osi/src/alarm.c
 @@ -96,6 +96,8 @@ struct alarm_t {
