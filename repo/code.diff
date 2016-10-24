@@ -113,6 +113,21 @@ index d913fc4..e8174d2 100644
  #endif
  
 
+project frameworks/av/
+diff --git a/media/libstagefright/CameraSource.cpp b/media/libstagefright/CameraSource.cpp
+index 68b258d..0af0116 100644
+--- a/media/libstagefright/CameraSource.cpp
++++ b/media/libstagefright/CameraSource.cpp
+@@ -1279,7 +1279,7 @@ MetadataBufferType CameraSource::metaDataStoredInVideoBuffers() const {
+     // buffer queue.
+     switch (mVideoBufferMode) {
+         case hardware::ICamera::VIDEO_BUFFER_MODE_DATA_CALLBACK_METADATA:
+-            return kMetadataBufferTypeNativeHandleSource;
++            return kMetadataBufferTypeInvalid;
+         case hardware::ICamera::VIDEO_BUFFER_MODE_BUFFER_QUEUE:
+             return kMetadataBufferTypeANWBuffer;
+         default:
+
 project frameworks/base/
 diff --git a/core/java/android/database/sqlite/SQLiteOpenHelper.java b/core/java/android/database/sqlite/SQLiteOpenHelper.java
 index 2dd4800..dbe13b6 100644
