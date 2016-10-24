@@ -1,6 +1,7 @@
 bionic/ 0d0b7a99e1baea5875467325829e0dafabb270b1
 build/ 79c171a55a361cd7907afdbfd8b73dce54066402
 external/stlport/ d0388a36b67665be55162388337055ee21a43206
+frameworks/av/ 62661dcec73284c2255cc3aa8550d4ed06e1350d
 frameworks/base/ e2a5d3439c13b8809cfe42eb539cb0088e3a9f58
 frameworks/native/ c473bd8642b25af135831d498f38815d5effaec8
 hardware/libhardware/ 1efcd37abdaf9c31ca6f2aba760bce2afb9e9380
