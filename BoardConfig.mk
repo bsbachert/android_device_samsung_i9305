@@ -66,3 +66,5 @@ BOARD_SEPOLICY_UNION += \
     system.te \
     ueventd.te \
     wpa_supplicant.te
+
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
