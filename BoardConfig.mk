@@ -22,6 +22,9 @@
 
 LOCAL_PATH := device/samsung/i9305
 
+# Allow old binaries
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
+
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 
