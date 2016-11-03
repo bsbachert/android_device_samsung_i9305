@@ -7,5 +7,5 @@
   <project name="p-an/android_kernel_samsung_smdk4412" path="kernel/samsung/smdk4412" remote="private"  />
   <project name="p-an/android_hardware_samsung" path="hardware/samsung" remote="private" />
 
-  <project path="external/stlport" name="platform/external/stlport" groups="pdk" remote="aosp" revision="refs/tags/android-5.1.1_r34"/>
+  <project path="external/stlport" name="CyanogenMod/android_external_stlport" remote="github" />
 </manifest>
