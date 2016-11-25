@@ -1,6 +1,6 @@
 bionic/ 47cf20ae09cccbde2f0b262678e958c679ba21ff
-build/ c2de06e7249e4d618664546db7c86aac4c0c4771
-frameworks/base/ d1a048aa9ebb387b9f05aac1d7cacde9ac8d2031
+build/ 0188b8f1531147848b5d2d1158fc50e6ae945cb2
+frameworks/base/ eaf21129edacc4cd82005b23e7751d515d1f0fe3
 frameworks/native/ d7b29fa3f8b2d97680b8eb94912d0d25cf20ebb0
 hardware/libhardware/ a4fa745e3a461f3a9ba41ef180366c00a5b1a56b
 prebuilts/sdk/ 3a294a68a1b5fb9c71fc04f439e6a10e82aa91ac

@@ -67,7 +67,7 @@ index d4c7928..82f3261 100644
 
 project build/
 diff --git a/core/Makefile b/core/Makefile
-index cb3ec9c..5902d1a 100644
+index 1d6bff0..563bfea 100644
 --- a/core/Makefile
 +++ b/core/Makefile
 @@ -1098,9 +1098,9 @@ define build-recoveryimage-target
