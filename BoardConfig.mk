@@ -69,3 +69,6 @@ BOARD_SEPOLICY_UNION += \
     system.te \
     ueventd.te \
     wpa_supplicant.te
+
+#this is a hack, it relies on this file being processed after the one from smdk4412-qcom-common
+BOARD_RIL_CLASS += ../../../device/samsung/i9305/ril/

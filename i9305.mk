@@ -79,8 +79,6 @@ PRODUCT_PACKAGES += \
     Stk \
     SamsungServiceMode
 
-$(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
-
 # Samsung symbols
 PRODUCT_PACKAGES += \
     libsamsung_symbols
@@ -99,7 +97,7 @@ PRODUCT_COPY_FILES += \
 # Allow tethering without provisioning app
 PRODUCT_PROPERTY_OVERRIDES += \
     net.tethering.noprovisioning=true \
-    ro.telephony.ril_class=smdk4x12QComRIL
+    ro.telephony.ril_class=i9305RIL
 
 
 # Include common makefile
